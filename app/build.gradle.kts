@@ -41,9 +41,9 @@ android {
 dependencies {
 
     // ── 聚合广告 SDK (Java 版) ────────────────────────────────
-    implementation(project(":UnionAd"))
+//    implementation(project(":UnionAd"))
     // 正式接入方使用 JitPack 坐标（需重新发版后 POM 才不含 kotlin-stdlib）:
-    // implementation("com.github.ImaTech2025:FsUnionAd:v1.0.0")
+     implementation("com.github.ImaTech2025:FsUnionAd:v1.0.1")
 
     // ── AndroidX 核心（纯 Java 版 core，不引入 kotlin-stdlib） ──
     implementation(libs.androidx.core)
