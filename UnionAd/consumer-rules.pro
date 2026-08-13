@@ -83,7 +83,6 @@
 
 
 # ── B3. 百青藤 (Baidu / 百度联盟 MobAds) ──────────────────────────────
--ignorewarnings
 -dontwarn com.baidu.mobads.sdk.api.**
 -keepclassmembers class * extends android.app.Activity {
    public void *(android.view.View);
