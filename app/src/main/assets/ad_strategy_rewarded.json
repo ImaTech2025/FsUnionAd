@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "strategy": {
+    "slotId": "10000003",
+    "strategyId": "default",
+    "strategies": [
+      {
+        "type": "BIDDING",
+        "priority": 1,
+        "timeoutMs": 3000,
+        "sources": [
+          {
+            "sdkName": "飞梭",
+            "sdkType": "FISSION",
+            "adUnitId": "1_1_1_1",
+            "appid": "TEST",
+            "token": "1yh0ryt83i0czmcsugsk98q64kr7g24u",
+            "priority": 1,
+            "bidFloor": 6.0,
+            "enabled": true,
+            "timeout": 5000
+          },
+          {
+            "sdkName": "穿山甲",
+            "sdkType": "PANGLE",
+            "appid": "5001125",
+            "adUnitId": "945410199",
+            "priority": 2,
+            "bidFloor": 4.0,
+            "enabled": true,
+            "timeout": 5000
+          },
+          {
+            "sdkName": "百青藤",
+            "sdkType": "BAIDU",
+            "appid": "e866cfb0",
+            "adUnitId": "5925490",
+            "priority": 3,
+            "bidFloor": 0.0,
+            "enabled": true,
+            "timeout": 5000
+          }
+        ]
+      },
+      {
+        "type": "WATERFALL",
+        "priority": 2,
+        "timeoutMs": 3000,
+        "sources": [
+          {
+            "sdkName": "飞梭",
+            "sdkType": "FISSION",
+            "adUnitId": "1_1_1_1",
+            "appid": "TEST",
+            "token": "1yh0ryt83i0czmcsugsk98q64kr7g24u",
+            "priority": 1,
+            "bidFloor": 6.0,
+            "enabled": true,
+            "timeout": 5000
+          },
+          {
+            "sdkName": "穿山甲",
+            "sdkType": "PANGLE",
+            "appid": "5001125",
+            "adUnitId": "945410199",
+            "priority": 2,
+            "bidFloor": 4.0,
+            "enabled": true,
+            "timeout": 5000
+          },
+          {
+            "sdkName": "百青藤",
+            "sdkType": "BAIDU",
+            "appid": "e866cfb0",
+            "adUnitId": "5925490",
+            "priority": 3,
+            "bidFloor": 0.0,
+            "enabled": true,
+            "timeout": 5000
+          }
+        ]
+      }
+    ]
+  }
+}

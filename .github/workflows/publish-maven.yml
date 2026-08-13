@@ -1,0 +1,87 @@
+# =============================================================================
+# UnionAd SDK → GitHub Packages 自动发布
+# -----------------------------------------------------------------------------
+# 触发条件(任一):
+#   1. 推送形如 v*.*.* 的 tag(自动发版,版本号取 tag 名)
+#   2. 手动 dispatch,可输入 version_name 和是否快照
+#
+# 凭据:
+#   GITHUB_TOKEN 自动注入,具备 write:packages 权限
+# =============================================================================
+
+name: Publish UnionAd to GitHub Packages
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'   # 例:v1.0.0-java、v1.1.0-java
+  workflow_dispatch:
+    inputs:
+      version_name:
+        description: '版本号,例如 1.0.0-java'
+        required: true
+        type: string
+      version_code:
+        description: '整型构建号'
+        required: true
+        type: string
+
+# 同一版本不允许并发发布
+concurrency:
+  group: publish-union-ad
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: macos-14   # 与本机一致的 JDK 17 环境
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Determine version
+        id: version
+        run: |
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            # tag 名形如 v1.0.0-java → 取 1.0.0-java
+            TAG_NAME="${GITHUB_REF#refs/tags/v}"
+            echo "name=${TAG_NAME}" >> "$GITHUB_OUTPUT"
+            # tag 自动发布的 code 取当前时间戳后 6 位(单调递增,避免同 tag 二次发布冲突)
+            echo "code=$(date +%s | tail -c 7)" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=${{ github.event.inputs.version_name }}" >> "$GITHUB_OUTPUT"
+            echo "code=${{ github.event.inputs.version_code }}" >> "$GITHUB_OUTPUT"
+          fi
+        shell: bash
+
+      - name: Show version
+        run: |
+          echo "📦 发布版本:${{ steps.version.outputs.name }} (code=${{ steps.version.outputs.code }})"
+
+      - name: Publish to GitHub Packages
+        env:
+          GPR_USER: ${{ github.actor }}
+          GPR_KEY: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ./scripts/publish-github.sh \
+            -PVERSION_NAME=${{ steps.version.outputs.name }} \
+            -PVERSION_CODE=${{ steps.version.outputs.code }} \
+            -Pgithub.owner=${GITHUB_REPOSITORY_OWNER} \
+            -Pgithub.repo=${GITHUB_REPOSITORY#*/}
+
+      - name: Generate Release Notes (tag 触发时)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+          # AAR 制品已托管在 GitHub Packages,不需要重复上传
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

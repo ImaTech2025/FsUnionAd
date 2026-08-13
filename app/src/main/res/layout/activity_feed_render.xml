@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        app:title="信息流(自渲染) Feed Render"
+        app:titleTextAppearance="@style/ToolbarTitle"
+        app:titleTextColor="@color/primary"
+        app:navigationIcon="@android:drawable/ic_menu_revert"
+        app:navigationContentDescription="返回" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="12dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Source Selector -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/DemoCard"
+                android:layout_marginBottom="12dp"
+                app:cardBackgroundColor="@color/secondary_container">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ad Source"
+                        android:textAppearance="@style/SectionTitle" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/source_chip_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:singleSelection="false" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Strategy Selector -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/DemoCard"
+                android:layout_marginBottom="12dp"
+                app:cardBackgroundColor="@color/fission_bg">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ad Strategy"
+                        android:textAppearance="@style/SectionTitle" />
+
+                    <RadioGroup
+                        android:id="@+id/strategy_radio_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+                        <RadioButton android:id="@+id/radio_strategy_waterfall" style="@style/FormatRadio" android:checked="true" android:text="Waterfall 瀑布流" />
+                        <RadioButton android:id="@+id/radio_strategy_bidding" style="@style/FormatRadio" android:text="Bidding 实时竞价" />
+                        <RadioButton android:id="@+id/radio_strategy_hybrid" style="@style/FormatRadio" android:text="Hybrid 混合竞价" />
+                    </RadioGroup>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Image Size Config (自渲染) -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/DemoCard"
+                android:layout_marginBottom="12dp"
+                app:cardBackgroundColor="@color/pangle_bg">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="setImageAcceptedSize (px)"
+                        android:textAppearance="@style/SectionTitle" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="信息流自渲染使用。Pangle &lt; 75xx 必传；75xx+ 可省略。留空(0)则不传递给三方 SDK (Pangle 内部走默认 640x320 px)。"
+                        android:textColor="@color/on_surface_variant"
+                        android:textSize="11sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:hint="宽 (px)">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_image_w"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="number"
+                                android:maxLength="5"
+                                android:text="640" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="高 (px)">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_image_h"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="number"
+                                android:maxLength="5"
+                                android:text="320" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Express View Size Config (自渲染可选) -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/DemoCard"
+                android:layout_marginBottom="12dp"
+                app:cardBackgroundColor="@color/secondary_container">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="setExpressViewAcceptedSize (dp) - 可选"
+                        android:textAppearance="@style/SectionTitle" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="自渲染时同时设置，与 imageSize 配套；Pangle &lt; 75xx 兼容性字段。留空(0)则不传递。"
+                        android:textColor="@color/on_surface_variant"
+                        android:textSize="11sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:hint="宽 (dp)">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_express_w"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="number"
+                                android:maxLength="5"
+                                android:text="0" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="高 (dp)">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_express_h"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="number"
+                                android:maxLength="5"
+                                android:text="0" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Info -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/DemoCard"
+                android:layout_marginBottom="12dp"
+                app:cardBackgroundColor="@color/tertiary_container">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="当前配置"
+                        android:textAppearance="@style/SectionTitle" />
+
+                    <TextView
+                        android:id="@+id/info_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="monospace"
+                        android:text="AppID: --\nSlotID: --\nStrategy: Waterfall"
+                        android:textColor="@color/on_surface_variant"
+                        android:textSize="13sp"
+                        android:lineSpacingExtra="4sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Feed Container -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/DemoCard"
+                android:layout_marginBottom="12dp"
+                app:cardBackgroundColor="@color/baidu_bg"
+                app:strokeColor="@color/status_ready"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Render Container"
+                        android:textAppearance="@style/SectionTitle" />
+
+                    <FrameLayout
+                        android:id="@+id/feed_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:minHeight="120dp"
+                        android:background="@drawable/log_background" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_load"
+                        style="@style/Widget.Material3.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="12dp"
+                        android:text="Load Feed Render"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Logs -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/DemoCard"
+                android:layout_marginBottom="12dp"
+                app:cardBackgroundColor="@color/surface"
+                app:strokeColor="@color/outline_variant"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Logs"
+                            android:textAppearance="@style/SectionTitle"
+                            android:textColor="@color/primary" />
+
+                        <Button
+                            android:id="@+id/btn_clear_logs"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Clear"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <androidx.core.widget.NestedScrollView
+                        android:id="@+id/logs_scroll"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/log_background"
+                        android:fillViewport="false"
+                        android:maxHeight="200dp"
+                        android:minHeight="120dp">
+
+                        <TextView
+                            android:id="@+id/logs_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="monospace"
+                            android:lineSpacingExtra="3sp"
+                            android:padding="16dp"
+                            android:text="等待操作..."
+                            android:textColor="@color/log_text"
+                            android:textSize="11sp" />
+                    </androidx.core.widget.NestedScrollView>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
