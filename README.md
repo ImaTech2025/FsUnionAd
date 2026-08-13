@@ -6,7 +6,7 @@
 [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg)](https://android-arsenal.com/api?level=21)
 [![Language](https://img.shields.io/badge/language-Java%2011-orange.svg)](https://openjdk.org/projects/jdk/11/)
 [![Version](https://img.shields.io/badge/version-1.0.0--java-informational.svg)](CHANGELOG.md)
-
+[![](https://jitpack.io/v/ImaTech2025/FsUnionAd.svg)](https://jitpack.io/#ImaTech2025/FsUnionAd)
 ---
 
 ## 简介
