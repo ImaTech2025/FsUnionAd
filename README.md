@@ -78,9 +78,9 @@ dependencyResolutionManagement {
 ```kotlin
 dependencies {
     implementation("com.github.ImaTech2025:FsUnionAd:v1.0.1")
-    // 按需引入对应平台 SDK
+    // 按需引入对应平台 SDK（优量汇/飞梭使用本地 AAR）
     implementation("com.pangle.cn:ads-sdk-pro:7.6.1.2")
-    implementation("com.qq.e.union:union:4.560.1470")
+    implementation(fileTree(mapOf("dir" to "libs/gdt", "include" to listOf("*.aar"))))
 }
 ```
 

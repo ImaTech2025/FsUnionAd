@@ -2,20 +2,29 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Pangle (CSJ) Required Permissions -->
+    <!-- ══ 权限声明 ══════════════════════════════════════════════════════
+         聚合 SDK 自身仅需 INTERNET / ACCESS_NETWORK_STATE（由 UnionAd
+         Manifest 自动合并）。以下权限为各广告平台填充率 / eCPM 所需，
+         按需声明即可；各联盟权限归属详见《接入文档》§2.3
+         「各联盟 SDK Manifest 配置」。
+         ══════════════════════════════════════════════════════════════ -->
+    <!-- 聚合 SDK + 各联盟通用：网络访问与状态 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <!-- Optional Permissions for better eCPM -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 穿山甲（AAR 已自带网络/存储/WiFi/震动/唤醒锁，此处补充官方推荐的设备信息权限） -->
+    <!-- 百青藤（AAR 未声明任何权限，以下全部需手动声明） -->
+    <!-- 优量汇（AAR 已自带粗定位/安装/包可见性等） -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
-    <!-- Necessary permission for Pangle to resolve security risks -->
+    <!-- 穿山甲自定义权限（AAR 已声明，此处显式声明与官方文档保持一致） -->
     <permission
         android:name="${applicationId}.openadsdk.permission.TT_PANGOLIN"
         android:protectionLevel="signature" />
@@ -75,16 +84,26 @@
             android:label="信息流自渲染 Feed Render"
             android:theme="@style/Theme.FsUnionAd" />
 
-        <!-- Pangle FileProvider -->
-<!--        <provider-->
-<!--            android:name="com.bytedance.sdk.openadsdk.TTFileProvider"-->
-<!--            android:authorities="${applicationId}.TTFileProvider"-->
-<!--            android:exported="false"-->
-<!--            android:grantUriPermissions="true">-->
-<!--            <meta-data-->
-<!--                android:name="android.support.FILE_PROVIDER_PATHS"-->
-<!--                android:resource="@xml/file_paths" />-->
-<!--        </provider>-->
+        <!-- ══ 联盟 SDK 需手动配置的组件 ═══════════════════════════════
+             穿山甲 / 飞梭组件由其 AAR Manifest 自动合并，无需手动声明。
+             优量汇 GDTFileProvider 未包含在 GDT AAR Manifest 中，
+             接入方必须手动声明；@xml/gdt_file_path 资源由 GDT AAR 自带，
+             无需自行创建。
+             ══════════════════════════════════════════════════════════ -->
+        <!-- 优量汇 FileProvider -->
+        <provider
+            android:name="com.qq.e.comm.GDTFileProvider"
+            android:authorities="${applicationId}.gdt.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/gdt_file_path" />
+        </provider>
+        <!-- 优量汇 targetSdk >= 28 必需 -->
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
     </application>
 

@@ -118,6 +118,7 @@ public abstract class PangleBaseAdapter implements AdAdapter {
     //  SDK 可用性检测
     // ════════════════════════════════════════════════════════════════
 
+    @Override
     public boolean isSdkAvailable() {
         if (sdkAvailable != null) return sdkAvailable;
         try {

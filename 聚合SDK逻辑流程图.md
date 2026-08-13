@@ -43,8 +43,9 @@ flowchart TD
 
 **关键说明：**
 - 初始化时**只注册适配器实例**，不会立即初始化各平台 SDK（各平台 appId 不同，由策略引擎在广告请求前按需触发）
+- 注册前先经 `isSdkAvailable()` 反射探测对应三方 SDK 是否已集成（关键类是否在 classpath），**未集成的平台自动跳过注册**，策略层解析到该广告源时得到 null 快速跳过，避免 `NoClassDefFoundError` 崩溃
 - `cloudConfigUrl` 为空时，不触发云端拉取，完全依赖 `defaultStrategyJson`
-- 自定义适配器通过 `registerCustomAdapter()` 在初始化后单独注册
+- 自定义适配器通过 `registerCustomAdapter()` 在初始化后单独注册（同样经 `isSdkAvailable()` 校验，未集成则 warn 跳过）
 
 ---
 

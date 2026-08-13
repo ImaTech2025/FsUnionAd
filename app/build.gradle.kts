@@ -41,9 +41,10 @@ android {
 dependencies {
 
     // ── 聚合广告 SDK (Java 版) ────────────────────────────────
-//    implementation(project(":UnionAd"))
-    // 正式接入方使用 JitPack 坐标（需重新发版后 POM 才不含 kotlin-stdlib）:
-     implementation("com.github.ImaTech2025:FsUnionAd:v1.0.1")
+    // 本地开发迭代：直接依赖源码模块，改动即时生效（当前调试阶段）
+    implementation(project(":UnionAd"))
+    // 正式接入方使用 JitPack 坐标（需重新发版后制品才含 isSdkAvailable 修复）:
+//    implementation("com.github.ImaTech2025:FsUnionAd:v1.0.1")
 
     // ── AndroidX 核心（纯 Java 版 core，不引入 kotlin-stdlib） ──
     implementation(libs.androidx.core)
@@ -53,7 +54,7 @@ dependencies {
 
     // ── 三方广告 SDK（Demo 完整引入，供适配器反射桥接） ──────
     implementation("com.pangle.cn:ads-sdk-pro:7.6.1.2")  // 穿山甲
-    implementation("com.baidu:mobads:9.42.2")              // 百青藤
+//    implementation("com.baidu:mobads:9.42.2")              // 百青藤
     implementation(fileTree(mapOf("dir" to "libs/gdt", "include" to listOf("*.aar"))))
 
     // ── 飞梭(Fission) SDK 及其传递依赖（UnionAd 已 compileOnly,接入方按需引入） ──

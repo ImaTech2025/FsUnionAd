@@ -502,6 +502,27 @@ AdAdapterRegistry (单例)
 └── pendingInits: Map<String, List<AdInitListener>> 正在初始化的 key → 等待回调的监听器列表
 ```
 
+> **注册时的 SDK 可用性校验（isSdkAvailable）**：
+> `FsUnionSDK.initialize()` 注册每个适配器前，先通过 `AdAdapter.isSdkAvailable()` 反射探测
+> 对应三方 SDK 关键类是否在 classpath 中（`AdAdapter` 接口提供 default 实现，默认返回 `true`；
+> 四个内置 BaseAdapter 各自覆写，用 `Class.forName()` 探测 Pangle/GDT/Baidu/Fission 入口类并缓存结果）。
+> 未集成的 SDK 对应适配器**不会进入注册表**（日志打印 warn 跳过），策略层解析到该广告源时得到 `null`
+> 并快速跳过（Waterfall 跳过 source / Bidding 跳过 bidder），避免执行到适配器方法时因三方类缺失
+> 抛出 `NoClassDefFoundError` 崩溃。`FsUnionSDK.registerCustomAdapter()` 与
+> `AdapterFactory.createIfAbsent()`（后台配置反射注册路径）同样执行此校验。
+
+> **类加载级防护（2026-08-13 加固）**：`isSdkAvailable()` 反射探测只能证明「入口类存在」，
+> adapter 类自身可能在**类加载阶段**就引用三方类（如静态字段/静态初始化器中的 SDK 类型）——
+> 此时即使探测类存在，`new` 适配器仍会因缺失的依赖类抛 `NoClassDefFoundError`（Error 而非 Exception）。
+> 三层防护兜底：
+> 1. `registerIfAvailable` 内 `creator.create()` 用 `catch (Throwable)` 包裹，构造/类加载阶段的
+>    `NoClassDefFoundError`、`ExceptionInInitializerError` 全部兜住后 warn 跳过；
+> 2. 适配器代码**不在静态字段/静态初始化器中持有三方 SDK 类型**（如 `BaiduBaseAdapter` 的
+>    `EMPTY_BIDDING_LISTENER` 静态字段已改为方法内创建，类加载不再解析 `BiddingListener`，
+>    仅调用竞败上报时才懒解析——调用点必然发生在该平台 SDK 已集成之后）；
+> 3. `AdapterFactory` 反射路径 catch 补充 `NoClassDefFoundError`（`Class.forName` 遇到
+>    「类存在但依赖缺失」时抛 Error 而非 `ClassNotFoundException`）。
+
 #### 7.3.1 初始化机制（同步 + 异步双版本）
 
 `AdAdapterRegistry` 提供两套初始化入口，对外统一通过 **`AdInitListener`** 回调通知结果，外部根据成功/失败自行决定下一步操作：

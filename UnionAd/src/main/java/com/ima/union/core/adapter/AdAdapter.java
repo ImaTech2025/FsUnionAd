@@ -29,6 +29,23 @@ public interface AdAdapter {
      */
     default String getSdkName() { return null; }
 
+    /**
+     * 检测对应三方 SDK 是否已集成到当前构建中（关键类是否存在于 classpath）。
+     *
+     * <p>内置平台适配器通过 {@link Class#forName(String)} 反射探测各自 SDK 关键类，
+     * 结果缓存于实例内，未集成时返回 {@code false}；</p>
+     * <p>自定义适配器（如 {@code BaseCustomAdAdapter} 子类）认为业务方自带依赖，
+     * 默认返回 {@code true}，无需探测。</p>
+     *
+     * <p><b>注册时校验</b>：{@code FsUnionSDK.initialize()} 注册各适配器前先调用本方法，
+     * 仅当返回 {@code true} 时才注册。这样未集成的 SDK 对应适配器不会进入注册表，
+     * 策略层解析该广告源时得到 {@code null} 并快速跳过，避免执行到适配器方法时
+     * 因三方类缺失抛出 {@code NoClassDefFoundError} 崩溃。</p>
+     *
+     * @return true 表示 SDK 可用（已集成），false 表示未集成不应注册
+     */
+    default boolean isSdkAvailable() { return true; }
+
     boolean isInitialized();
 
     void initialize(Context context, String appId, String token, AdInitCallback callback);

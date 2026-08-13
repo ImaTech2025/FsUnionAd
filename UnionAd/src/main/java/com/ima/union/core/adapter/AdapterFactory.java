@@ -80,11 +80,24 @@ public final class AdapterFactory {
                     return null;
                 }
 
+                // SDK 可用性校验：自定义 adapter 依赖的三方 SDK 未集成时跳过注册，
+                // 避免策略层使用时因类缺失抛 NoClassDefFoundError（下次请求会重试）
+                if (!adapter.isSdkAvailable()) {
+                    FsLogger.w(TAG, "Adapter SDK not available in classpath, skip registering: " + className);
+                    return null;
+                }
+
                 registry.registerCustomAdapter(adapter, sourceConfig.getAdFormat());
                 return adapter;
             } catch (ClassNotFoundException e) {
                 FsLogger.e(TAG, "Adapter class not found: " + className
                         + ". Make sure the class is packaged in the APK.");
+            } catch (NoClassDefFoundError e) {
+                // 类存在但其依赖的三方 SDK 类缺失（如自定义 adapter 引用了未集成的 SDK）：
+                // 此时 Class.forName 抛的是 Error 而非 ClassNotFoundException，必须单独兜住，
+                // 否则会逃逸到策略层导致崩溃（下次请求同 key 会重试）
+                FsLogger.e(TAG, "Adapter class depends on missing SDK classes: " + className
+                        + ": " + e.getMessage());
             } catch (InstantiationException | IllegalAccessException e) {
                 FsLogger.e(TAG, "Failed to instantiate adapter: " + className
                         + " (need public no-arg constructor): " + e.getMessage());

@@ -117,6 +117,7 @@ public abstract class BaiduBaseAdapter implements AdAdapter {
     //  SDK 可用性检测
     // ════════════════════════════════════════════════════════════════
 
+    @Override
     public boolean isSdkAvailable() {
         if (sdkAvailable != null) return sdkAvailable;
         try {
@@ -284,27 +285,36 @@ public abstract class BaiduBaseAdapter implements AdAdapter {
             LinkedHashMap<String, Object> winInfo = new LinkedHashMap<>();
             winInfo.put("loss_reason", reason != null ? reason : "LOST");
             if (nativeAd instanceof SplashAd) {
-                ((SplashAd) nativeAd).biddingFail(winInfo, EMPTY_BIDDING_LISTENER);
+                ((SplashAd) nativeAd).biddingFail(winInfo, createEmptyBiddingListener());
             } else if (nativeAd instanceof ExpressInterstitialAd) {
-                ((ExpressInterstitialAd) nativeAd).biddingFail(winInfo, EMPTY_BIDDING_LISTENER);
+                ((ExpressInterstitialAd) nativeAd).biddingFail(winInfo, createEmptyBiddingListener());
             } else if (nativeAd instanceof RewardVideoAd) {
-                ((RewardVideoAd) nativeAd).biddingFail(winInfo, EMPTY_BIDDING_LISTENER);
+                ((RewardVideoAd) nativeAd).biddingFail(winInfo, createEmptyBiddingListener());
             } else if (nativeAd instanceof NativeResponse) {
-                ((NativeResponse) nativeAd).biddingFail(winInfo, EMPTY_BIDDING_LISTENER);
+                ((NativeResponse) nativeAd).biddingFail(winInfo, createEmptyBiddingListener());
             } else if (nativeAd instanceof ExpressResponse) {
-                ((ExpressResponse) nativeAd).biddingFail(winInfo, EMPTY_BIDDING_LISTENER);
+                ((ExpressResponse) nativeAd).biddingFail(winInfo, createEmptyBiddingListener());
             }
         } catch (Exception e) {
             FsLogger.w(TAG, "Failed to report bid fail: " + e.getMessage());
         }
     }
 
-    private static final BiddingListener EMPTY_BIDDING_LISTENER = new BiddingListener() {
-        @Override
-        public void onBiddingResult(boolean success, String message, HashMap<String, Object> extra) {
-            // 竞败上报无需关心回调结果
-        }
-    };
+    /**
+     * 创建一个空的竞败回调监听器。
+     * <p>刻意不缓存为静态字段：{@code BiddingListener} 类型若在方法体内（懒解析），
+     * 类加载 {@code BaiduBaseAdapter} 时无需解析它；一旦提升为静态字段（含初始化器），
+     * SDK 未集成时类加载即抛 {@code NoClassDefFoundError}（见 FsUnionSDK 注册阶段防护）。</p>
+     * <p>竞败上报频率低，每次新建实例的开销可忽略。</p>
+     */
+    private BiddingListener createEmptyBiddingListener() {
+        return new BiddingListener() {
+            @Override
+            public void onBiddingResult(boolean success, String message, HashMap<String, Object> extra) {
+                // 竞败上报无需关心回调结果
+            }
+        };
+    }
 
     @Override
     public void destroy() {
