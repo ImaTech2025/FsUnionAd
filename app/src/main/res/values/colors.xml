@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Demo UI Colors -->
+    <color name="primary">#6750A4</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="primary_container">#EADDFF</color>
+    <color name="secondary_container">#E8DEF8</color>
+    <color name="tertiary_container">#FFD8E4</color>
+    <color name="surface">#FFFBFE</color>
+    <color name="surface_variant">#E7E0EC</color>
+    <color name="on_surface_variant">#49454F</color>
+    <color name="outline_variant">#CAC4D0</color>
+    <color name="error">#BA1A1A</color>
+
+    <!-- Platform card backgrounds -->
+    <color name="pangle_bg">#E8F5E9</color>
+    <color name="baidu_bg">#FFF3E0</color>
+    <color name="fission_bg">#E3F2FD</color>
+    <color name="status_ready">#4CAF50</color>
+    <color name="status_pending">#FF9800</color>
+
+    <!-- Log area -->
+    <color name="log_bg">#F5F5F5</color>
+    <color name="log_text">#333333</color>
+    <color name="log_error">#BA1A1A</color>
+
+    <!-- Splash overlay -->
+    <color name="splash_gradient_start">#6750A4</color>
+    <color name="splash_gradient_end">#625B71</color>
+    <color name="splash_text">#FFFFFF</color>
+    <color name="splash_overlay_bg">#99000000</color>
+
+    <!-- Native ad card -->
+    <color name="ad_card_bg">#FFFFFFFF</color>
+    <color name="ad_title_text">#FF1A1A1A</color>
+    <color name="ad_desc_text">#FF888888</color>
+    <color name="ad_meta_text">#FFAAAAAA</color>
+    <color name="ad_badge_bg">#FFF0F0F0</color>
+    <color name="ad_badge_text">#FF999999</color>
+    <color name="ad_image_placeholder">#FFE8E8E8</color>
+    <color name="ad_cta_bg">#FF6750A4</color>
+    <color name="ad_cta_text">#FFFFFFFF</color>
+    <color name="ad_source_text">#FF999999</color>
+    <color name="ad_star_color">#FFFFB300</color>
+</resources>

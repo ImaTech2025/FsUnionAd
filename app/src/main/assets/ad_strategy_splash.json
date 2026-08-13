@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "strategy": {
+    "slotId": "10000001",
+    "strategyId": "default",
+    "strategies": [
+      {
+        "type": "BIDDING",
+        "priority": 1,
+        "timeoutMs": 4000,
+        "sources": [
+          {
+            "sdkName": "飞梭",
+            "sdkType": "FISSION",
+            "adUnitId": "1_1_1",
+            "appid": "TEST",
+            "token": "1yh0ryt83i0czmcsugsk98q64kr7g24u",
+            "priority": 1,
+            "bidFloor": 5.0,
+            "enabled": true,
+            "timeout": 5000
+          },
+          {
+            "sdkName": "穿山甲",
+            "sdkType": "PANGLE",
+            "adUnitId": "887367774",
+            "appid": "5001125",
+            "priority": 2,
+            "bidFloor": 3.0,
+            "enabled": true,
+            "timeout": 5000
+          },
+          {
+            "sdkName": "百青藤",
+            "sdkType": "BAIDU",
+            "adUnitId": "887367774",
+            "appid": "e866cfb0",
+            "priority": 3,
+            "bidFloor": 2.0,
+            "enabled": true,
+            "timeout": 5000
+          }
+        ]
+      }
+    ]
+  }
+}

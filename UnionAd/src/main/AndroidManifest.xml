@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+    ═══════════════════════════════════════════════════════════════════════
+    FsUnionAd 聚合广告 SDK — AndroidManifest
+    ═══════════════════════════════════════════════════════════════════════
+
+    本文件声明聚合 SDK 运行所需的权限。接入方引入 UnionAd 依赖后，
+    以下权限会自动合并到主工程 Manifest，无需手动添加。
+
+    各广告平台 SDK（穿山甲/优量汇/百青藤/飞梭）的组件声明
+    （Activity / Service / Provider / Receiver）由各 SDK 自身的 AAR
+    Manifest 自动声明并合并到主工程。
+
+    注意：穿山甲自定义权限 ${applicationId}.openadsdk.permission.TT_PANGOLIN
+    使用了 ${applicationId} 占位符，在 library 模块中无法解析，
+    由穿山甲 SDK AAR 自身的 Manifest 自动声明并合并到主工程。
+    ═══════════════════════════════════════════════════════════════════════
+    -->
+
+    <!-- ── 基础权限（必需） ─────────────────────────────────────────────── -->
+    <!-- 所有广告 SDK 均需要网络访问和网络状态读取 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- ── 推荐权限（提升广告填充率和 eCPM） ────────────────────────────── -->
+    <!-- WiFi 状态：广告 SDK 用于网络环境判断，提升填充率 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 修改网络状态：部分 SDK（优量汇/穿山甲）用于网络切换检测 -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
+    <!-- 设备信息：用于广告定向和反作弊（Android 10+ 需动态申请） -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!-- 位置信息：用于 LBS 广告定向，提升 eCPM（需动态申请） -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- 存储权限：广告素材缓存和下载（Android 10+ 需 scoped storage） -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!-- 应用安装：广告下载类落地页跳转安装 -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+    <!-- 包可见性：Android 11+ 需声明以检测已安装应用（广告跳转/应用市场） -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+
+    <!-- 震动：激励视频/插屏广告交互反馈 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- 唤醒锁：视频广告播放时保持 CPU 运行 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application>
+        <!--优量汇-->
+        <provider
+            android:name="com.qq.e.comm.GDTFileProvider"
+            android:authorities="${applicationId}.gdt.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/gdt_file_path" />
+        </provider>
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+        <!-- 声明SDK所需要的组件 -->
+        <service
+            android:name="com.qq.e.comm.DownloadService"
+            android:exported="false" />
+        <!-- 请开发者注意字母的大小写，ADActivity，而不是AdActivity -->
+        <activity
+            android:name="com.qq.e.ads.ADActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:multiprocess="true"/>
+        <activity
+            android:name="com.qq.e.ads.PortraitADActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:multiprocess="true"/>
+        <activity
+            android:name="com.qq.e.ads.LandscapeADActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensorLandscape"
+            android:multiprocess="true"/>
+        <!-- 用于激励视频可选广告的竖屏透明背景activity -->
+        <activity
+            android:name="com.qq.e.ads.RewardvideoPortraitADActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:multiprocess="true">
+            <meta-data android:name="android.notch_support" android:value="true"/>
+        </activity>
+        <!-- 用于激励视频可选广告的横屏透明背景activity -->
+        <activity
+            android:name="com.qq.e.ads.RewardvideoLandscapeADActivity"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:multiprocess="true">
+            <meta-data android:name="android.notch_support" android:value="true"/>
+        </activity>
+
+        <activity
+            android:name="com.qq.e.ads.DialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            android:multiprocess="true"/>
+    </application>
+
+</manifest>

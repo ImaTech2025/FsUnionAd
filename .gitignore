@@ -1,0 +1,50 @@
+# ===== Build Output =====
+**/build/
+**/out/
+bin/
+gen/
+
+# ===== Gradle =====
+.gradle/
+**/.gradle/
+.gradle_home/
+
+# ===== Android =====
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+*.log
+captures/
+**/.externalNativeBuild/
+**/.cxx/
+
+# ===== IDE - IntelliJ / Android Studio =====
+*.iml
+.idea/
+.kotlin/
+
+# ===== IDE - Eclipse =====
+.settings/
+.classpath
+.project
+
+# ===== Local Configuration =====
+local.properties
+
+# ===== macOS =====
+.DS_Store
+**/.DS_Store
+
+# ===== Windows =====
+Thumbs.db
+ehthumbs.db
+
+# ===== Signing / Keystore (never commit) =====
+*.jks
+*.keystore
+keystore.properties
+
+# ===== Agent / Tooling =====
+.agent/
