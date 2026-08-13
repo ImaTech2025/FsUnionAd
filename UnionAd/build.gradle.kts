@@ -32,6 +32,9 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
+    // ── 纯 Java 模块：关闭 AGP 9.x 内置 Kotlin 支持，移除自动注入的 kotlin-stdlib ──
+    enableKotlin = false
+
     // ── 声明 release 变体参与 maven-publish,AGP 据此创建 SoftwareComponent ──
     publishing {
         singleVariant("release")
