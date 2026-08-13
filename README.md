@@ -77,7 +77,7 @@ dependencyResolutionManagement {
 
 ```kotlin
 dependencies {
-    implementation("com.github.ImaTech2025:FsUnionAd:v1.0.1")
+    implementation("com.github.ImaTech2025:FsUnionAd:v1.0.2")
     // 按需引入对应平台 SDK（优量汇/飞梭使用本地 AAR）
     implementation("com.pangle.cn:ads-sdk-pro:7.6.1.2")
     implementation(fileTree(mapOf("dir" to "libs/gdt", "include" to listOf("*.aar"))))
@@ -307,7 +307,7 @@ dependencyResolutionManagement {
 
 ```kotlin
 dependencies {
-    implementation("com.github.ImaTech2025:FsUnionAd:v1.0.1")
+    implementation("com.github.ImaTech2025:FsUnionAd:v1.0.2")
 
     // 按需引入各广告平台 SDK（必须，否则该平台无实际能力）
     implementation("com.pangle.cn:ads-sdk-pro:7.6.1.2")
@@ -321,7 +321,7 @@ dependencies {
 ### 3. 运行时获取 SDK 版本号
 
 ```java
-String version = FsUnionSDK.getVersion();          // "v1.0.1"
+String version = FsUnionSDK.getVersion();          // "1.0.2-java"
 int code = FsUnionSDK.getVersionCode();            // 1
 ```
 

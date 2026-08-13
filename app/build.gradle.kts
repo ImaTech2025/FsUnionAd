@@ -41,10 +41,10 @@ android {
 dependencies {
 
     // ── 聚合广告 SDK (Java 版) ────────────────────────────────
-    // 本地开发迭代：直接依赖源码模块，改动即时生效（当前调试阶段）
-    implementation(project(":UnionAd"))
-    // 正式接入方使用 JitPack 坐标（需重新发版后制品才含 isSdkAvailable 修复）:
-//    implementation("com.github.ImaTech2025:FsUnionAd:v1.0.1")
+    // 正式接入方式：JitPack 坐标（v1.0.2 制品已含 isSdkAvailable/类加载加固修复）
+    implementation("com.github.ImaTech2025:FsUnionAd:v1.0.2")
+    // 本地开发迭代：注释上方坐标，改用下方源码模块依赖（改动即时生效）
+//    implementation(project(":UnionAd"))
 
     // ── AndroidX 核心（纯 Java 版 core，不引入 kotlin-stdlib） ──
     implementation(libs.androidx.core)
