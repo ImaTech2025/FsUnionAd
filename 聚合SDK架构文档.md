@@ -908,9 +908,7 @@ UnionAd/
 │               ├── manager/        # 广告格式管理器
 │               ├── adapters/       # 平台适配器实现
 │               └── sample/         # 接入示例
-├── 聚合SDK架构文档.md      # 本文档
-├── 接入文档.md
-└── README.md
+└── consumer-rules.pro              # 混淆配置
 ```
 
 ---

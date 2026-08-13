@@ -60,25 +60,31 @@
 
 ### 1. 添加依赖
 
-**方式 A:源码依赖(推荐调试时使用)**
+**Step 1.** 在根目录 `settings.gradle.kts` 中添加 JitPack 仓库：
 
 ```kotlin
-// settings.gradle.kts
-include(":UnionAd")
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+    }
+}
+```
 
-// app/build.gradle.kts
+**Step 2.** 在 app 模块的 `build.gradle.kts` 中添加依赖：
+
+```kotlin
 dependencies {
-    implementation(project(":UnionAd"))
+    implementation("com.github.ImaTech2025:FsUnionAd:1.0.0-java")
     // 按需引入对应平台 SDK
     implementation("com.pangle.cn:ads-sdk-pro:7.6.1.2")
     implementation("com.qq.e.union:union:4.560.1470")
 }
 ```
 
-**方式 B:Maven 依赖(推荐生产环境使用)**
-
-SDK 制品托管在 GitHub Packages,坐标 `com.ima.union:union-ad-sdk:<version>`。
-完整接入步骤和发布机制见 [Maven 集成](#maven-集成) 章节。
+> 完整接入步骤详见 [接入文档](接入文档.md)。
 
 ### 2. 初始化 SDK
 
@@ -183,8 +189,6 @@ UnionAd/
 │   └── custom/                       # 自定义适配器基类
 ├── sample/
 │   └── SampleUsage.java              # 完整接入示例
-├── 聚合SDK架构文档.md
-├── 接入文档.md
 └── README.md                         # 本文档
 ```
 
@@ -278,100 +282,66 @@ SDK 在每次 `load()` 时自动选择配置，优先级从高到低：
 
 ---
 
-## Maven 集成
+## JitPack 集成
 
-> 适用场景:SDK 已发布到 GitHub Packages(默认仓库),或你想作为 Maven 制品被其他项目依赖。
+> SDK 通过 [JitPack](https://jitpack.io/#ImaTech2025/FsUnionAd) 发布，无需私有仓库凭证。
 
-### 1. 业务方 settings.gradle.kts 添加仓库
+### 1. 添加 JitPack 仓库
 
 ```kotlin
 // settings.gradle.kts
 dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
-        // GitHub Packages — UnionAd SDK 托管仓库
-        maven {
-            name = "githubFsUnionAd"
-            url = uri("https://maven.pkg.github.com/ima-global/FsUnionAd")
-            credentials {
-                // 仅当仓库为 private 时需要;public 仓库可省略
-                username = providers.gradleProperty("gpr.user").orNull
-                    ?: System.getenv("GPR_USER")
-                password = providers.gradleProperty("gpr.key").orNull
-                    ?: System.getenv("GPR_KEY")
-            }
-        }
+        maven { url = uri("https://jitpack.io") }
+        // 各广告平台 Maven 仓库
+        maven { url = uri("https://artifact.bytedance.com/repository/pangle") }
+        maven { url = uri("https://dl-maven-android.tencent.com/repository/maven") }
     }
 }
 ```
 
-> 💡 `gpr.user` / `gpr.key` 可写入工程根目录的 `local.properties`(不进 git),也可通过环境变量 `GPR_USER` / `GPR_KEY` 注入。
-
-### 2. app/build.gradle.kts 引入 SDK
+### 2. 引入 SDK 依赖
 
 ```kotlin
 dependencies {
-    // 引入 UnionAd SDK(版本号参见 https://github.com/ima-global/FsUnionAd/packages)
-    implementation("com.ima.union:union-ad-sdk:1.0.0-java")
+    implementation("com.github.ImaTech2025:FsUnionAd:1.0.0-java")
 
-    // 按需引入各广告平台 SDK(必须,否则该平台无实际能力)
+    // 按需引入各广告平台 SDK（必须，否则该平台无实际能力）
     implementation("com.pangle.cn:ads-sdk-pro:7.6.1.2")
     implementation("com.baidu:mobads:9.42.2")
     // ...
 }
 ```
 
+> 版本号对应 GitHub Release Tag，可在 [JitPack](https://jitpack.io/#ImaTech2025/FsUnionAd) 查看可用版本。
+
 ### 3. 运行时获取 SDK 版本号
 
 ```java
-// 业务方在任意位置调用,无需 SDK 已初始化
 String version = FsUnionSDK.getVersion();          // "1.0.0-java"
 int code = FsUnionSDK.getVersionCode();            // 1
-// 或直接使用门面类
-String v = FsUnionSdkVersion.getVersion();
 ```
 
 ### 4. 维护者发布新版本
-
-#### 本地发布到 GitHub Packages
-
-```bash
-# 准备环境变量(GITHUB_TOKEN / 个人 PAT 均可,需 write:packages 权限)
-export GPR_USER=your-github-username
-export GPR_KEY=ghp_xxxxxxxxxxxxxxxxxxxx
-
-# 编辑 gradle.properties 修改版本号
-# VERSION_NAME=1.1.0-java
-# VERSION_CODE=2
-
-# 执行发布
-./scripts/publish-github.sh
-```
-
-#### 本地发布到 ~/.m2(联调用)
-
-```bash
-./scripts/publish-local.sh
-# 产物路径:~/.m2/repository/com/ima/union/union-ad-sdk/1.0.0-java/
-```
-
-#### 推送 tag 触发 CI 自动发布
 
 ```bash
 # 提交版本号变更
 git add gradle.properties
 git commit -m "chore: bump version to 1.1.0-java"
 
-# 打 tag(必须以 v 开头)
+# 打 tag（必须以 v 开头）
 git tag v1.1.0-java
 git push origin main
 git push origin v1.1.0-java
 
-# GitHub Actions 自动发布到 Packages,并生成 Release Notes
+# JitPack 自动检测 tag 并构建制品
+# GitHub Actions 同步发布到 GitHub Packages 并生成 Release Notes
 ```
 
-发布完成后,在 `https://github.com/ima-global/FsUnionAd/packages` 页面可看到制品。
+推送 tag 后，JitPack 会自动检测并构建。访问 `https://jitpack.io/#ImaTech2025/FsUnionAd` 确认构建状态。
 
 ---
 
@@ -390,7 +360,9 @@ git push origin v1.1.0-java
 
 - 📐 [架构设计文档](聚合SDK架构文档.md) — 分层设计、策略引擎、数据流说明
 - 📖 [接入文档](接入文档.md) — 完整的接入步骤和代码示例
-- 💻 [SampleUsage.java](src/main/java/com/ima/union/sample/SampleUsage.java) — 可运行的完整示例代码
+- 📊 [埋点文档](聚合SDK埋点文档.md) — 事件定义、ext 参数、上报规范
+- 🔄 [逻辑流程图](聚合SDK逻辑流程图.md) — 全链路时序图与状态流转
+- 💻 [SampleUsage.java](UnionAd/src/main/java/com/ima/union/sample/SampleUsage.java) — 可运行的完整示例代码
 
 ---
 

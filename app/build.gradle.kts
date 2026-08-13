@@ -36,6 +36,11 @@ android {
 }
 
 dependencies {
+
+    // ── 聚合广告 SDK (Java 版) ────────────────────────────────
+    implementation(project(":UnionAd"))
+    // implementation("com.github.ImaTech2025:FsUnionAd:v1.0.4_SNAPSHOT")
+
     // ── AndroidX 核心 ──────────────────────────────────────────
     implementation(libs.androidx.core.ktx)
     implementation("androidx.appcompat:appcompat:1.7.0")
@@ -46,9 +51,6 @@ dependencies {
 
     // ── Material Design 3 ──────────────────────────────────────
     implementation("com.google.android.material:material:1.12.0")
-
-    // ── 聚合广告 SDK (Java 版) ────────────────────────────────
-    implementation(project(":UnionAd"))
 
     // ── 三方广告 SDK（Demo 完整引入，供适配器反射桥接） ──────
     implementation("com.pangle.cn:ads-sdk-pro:7.6.1.2")  // 穿山甲
