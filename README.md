@@ -325,24 +325,6 @@ String version = FsUnionSDK.getVersion();          // "1.0.2-java"
 int code = FsUnionSDK.getVersionCode();            // 1
 ```
 
-### 4. 维护者发布新版本
-
-```bash
-# 提交版本号变更
-git add gradle.properties
-git commit -m "chore: bump version to 1.1.0-java"
-
-# 打 tag（必须以 v 开头）
-git tag v1.1.0-java
-git push origin main
-git push origin v1.1.0-java
-
-# JitPack 自动检测 tag 并构建制品
-# GitHub Actions 同步发布到 GitHub Packages 并生成 Release Notes
-```
-
-推送 tag 后，JitPack 会自动检测并构建。访问 `https://jitpack.io/#ImaTech2025/FsUnionAd` 确认构建状态。
-
 ---
 
 ## 环境要求
